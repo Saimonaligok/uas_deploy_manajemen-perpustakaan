@@ -1,5 +1,5 @@
-Flask==3.1.0
-Flask-SQLAlchemy==3.1.1
-Flask-WTF==1.2.2
-PyMySQL==1.1.1
-WTForms==3.2.1
+echo "flask==2.3.2" > requirements.txt
+echo "flask_sqlalchemy==3.0.2" >> requirements.txt
+echo "flask_wtf==1.1.1" >> requirements.txt
+echo "pymysql==1.0.3" >> requirements.txt
+echo "wtforms==3.0.1" >> requirements.txt
