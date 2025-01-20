@@ -8,74 +8,53 @@
     <style>
         body {
             background-color: #f9f9f9;
+            font-family: Arial, sans-serif;
         }
         .container {
-            max-width: 600px;
+            max-width: 500px;
             margin: 50px auto;
+            padding: 20px;
             background: #fff;
             border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 4px 10px rgba(128, 0, 128, 0.2);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
-        h1 {
-            color: #800080;
+        h2 {
+            color: #6a1b9a;
             text-align: center;
             margin-bottom: 20px;
         }
-        .btn {
-            background-color: #800080;
-            color: #fff;
+        .btn-primary {
+            background-color: #6a1b9a;
             border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
         }
-        .btn:hover {
-            background-color: #a020f0;
+        .btn-primary:hover {
+            background-color: #512da8;
         }
-        label {
-            color: #800080;
-            font-weight: bold;
-        }
-        .form-input {
-            margin-bottom: 15px;
+        .btn-secondary {
+            margin-top: 10px;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Edit Buku</h1>
-
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                <ul class="alert alert-warning">
-                    {% for category, message in messages %}
-                        <li class="{{ category }}">{{ message }}</li>
-                    {% endfor %}
-                </ul>
-            {% endif %}
-        {% endwith %}
-
+        <h2>Edit Buku</h2>
         <form method="POST">
             {{ form.hidden_tag() }}
-            <div class="form-group">
-                <label for="judul">Judul Buku:</label>
-                {{ form.judul(class="form-control form-input") }}
+            <div class="mb-3">
+                <label for="judul" class="form-label">Judul Buku</label>
+                {{ form.judul(class="form-control") }}
             </div>
-            <div class="form-group">
-                <label for="pengarang">Pengarang:</label>
-                {{ form.pengarang(class="form-control form-input") }}
+            <div class="mb-3">
+                <label for="pengarang" class="form-label">Pengarang</label>
+                {{ form.pengarang(class="form-control") }}
             </div>
-            <div class="form-group">
-                <label for="tahun">Tahun Terbit:</label>
-                {{ form.tahun(class="form-control form-input") }}
+            <div class="mb-3">
+                <label for="tahun" class="form-label">Tahun Terbit</label>
+                {{ form.tahun(class="form-control") }}
             </div>
-            <div>
-                <button type="submit" class="btn">Update Buku</button>
-            </div>
+            <button type="submit" class="btn btn-primary w-100">Simpan Perubahan</button>
         </form>
-        <div class="text-center mt-3">
-            <a href="{{ url_for('index') }}" class="btn">Kembali ke Daftar Buku</a>
-        </div>
+        <a href="{{ url_for('index') }}" class="btn btn-secondary w-100 mt-3">Kembali</a>
     </div>
 </body>
 </html>
