@@ -3,12 +3,22 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
 from wtforms import StringField, IntegerField, SubmitField, PasswordField
 from wtforms.validators import DataRequired, Length
+import os
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:@localhost/library_db'
-app.config['SECRET_KEY'] = 'your_secret_key'
+
+# Gunakan PostgreSQL untuk produksi (Vercel) dan SQLite untuk pengembangan lokal
+if os.environ.get('VERCEL_ENV') == 'production':
+    # Konfigurasi PostgreSQL untuk produksi
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
+else:
+    # Gunakan SQLite untuk pengembangan lokal
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///library.db'
+
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'your_secret_key')
 db = SQLAlchemy(app)
 
+# Model
 class Books(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     judul = db.Column(db.String(100), nullable=False)
@@ -18,6 +28,7 @@ class Books(db.Model):
     def __repr__(self):
         return f'<Book {self.judul}>'
 
+# Form
 class BookForm(FlaskForm):
     judul = StringField('Judul Buku', validators=[DataRequired(), Length(max=100)])
     pengarang = StringField('Pengarang', validators=[DataRequired(), Length(max=100)])
@@ -29,6 +40,7 @@ class LoginForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired()])
     submit = SubmitField('Login')
 
+# Rute
 @app.route('/')
 def index():
     books = Books.query.all()
@@ -38,7 +50,8 @@ def index():
 def login():
     form = LoginForm()
     if form.validate_on_submit():
-        if form.username.data == 'saimona' and form.password.data == 'saimona123':
+        if form.username.data == os.environ.get('ADMIN_USERNAME', 'saimona') and \
+           form.password.data == os.environ.get('ADMIN_PASSWORD', 'saimona123'):
             session['admin_logged_in'] = True
             flash('Berhasil login sebagai admin!', 'success')
             return redirect(url_for('index'))
@@ -100,3 +113,6 @@ def delete_book(id):
     flash('Buku berhasil dihapus!', 'success')
     return redirect(url_for('index'))
 
+# Buat tabel
+with app.app_context():
+    db.create_all()
