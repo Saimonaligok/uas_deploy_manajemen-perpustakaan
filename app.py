@@ -100,5 +100,3 @@ def delete_book(id):
     flash('Buku berhasil dihapus!', 'success')
     return redirect(url_for('index'))
 
-if __name__ == '__main__':
-    app.run(debug=True)
